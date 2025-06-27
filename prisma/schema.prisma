@@ -25,10 +25,14 @@ enum CommentStatus {
   REJECTED
 }
 
+enum RoleTypes {
+  BASIC
+  ADMIN
+}
+
 model Roles {
   id              Int               @id @default(autoincrement())
-  name            String
-  key             String
+  name            RoleTypes         @default(BASIC)
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
   RolePermissions RolePermissions[]

@@ -36,6 +36,7 @@ export default async function userMiddleware(
       return;
     }
 
+    // @ts-ignore
     req.user = email;
     next();
   } catch (error) {

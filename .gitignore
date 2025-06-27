@@ -1,2 +1,4 @@
 .env
 /src/generated/prisma
+uploads
+node_modules

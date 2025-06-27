@@ -8,9 +8,11 @@ dotnev.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+
 let port = process.env.PORT;
 
-app.use("/user", userRouter)
+app.use("/user", userRouter);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

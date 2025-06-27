@@ -5,6 +5,7 @@ import { createUserSchema } from "../validators/createUser";
 import vine from "@vinejs/vine";
 import { PrismaClient } from "../generated/prisma";
 import dotenv from "dotenv";
+import fs from "fs";
 
 dotenv.config();
 
@@ -12,6 +13,19 @@ const client = new PrismaClient();
 
 export async function userSignup(req: Request, res: Response) {
   try {
+    let defaultRole = await client.roles.findFirst({
+      where: {
+        name: "BASIC",
+      },
+    });
+
+    if (!defaultRole) {
+      res.status(404).json({
+        msg: "No roles found in database",
+      });
+      return;
+    }
+
     const payload = await vine.validate({
       schema: createUserSchema,
       data: req.body,
@@ -41,6 +55,13 @@ export async function userSignup(req: Request, res: Response) {
         password: hashedPassword,
         avatar,
         status,
+        UserRoles: {
+          create: [
+            {
+              role_id: defaultRole.id,
+            },
+          ],
+        },
       },
     });
 
@@ -90,10 +111,124 @@ export async function userLogin(req: Request, res: Response) {
       return;
     }
 
-    let token = await jwt.sign(password, process.env.JWT_SECRET!);
+    let token = await jwt.sign({ email }, process.env.JWT_SECRET!);
 
     res.status(200).json({
-       token,
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function userDetails(req: Request, res: Response) {
+  try {
+    // @ts-ignore
+    let user = req?.user;
+    let currentUser = await client.users.findFirst({
+      where: {
+        email: user,
+      },
+    });
+
+    let userId = currentUser?.id;
+
+    let userDetails = await client.users.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+
+    res.status(200).json({
+      userDetails,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function editUserDetails(req: Request, res: Response) {
+  try {
+    let userId = Number(req.params.userId);
+
+    if (!userId) {
+      res.status(404).json({
+        msg: "No user id in params",
+      });
+      return;
+    }
+
+    let name = req.body?.name;
+    let email = req.body?.email;
+    let password = req.body?.password;
+    const file = (req as Request & { file?: Express.Multer.File }).file;
+    let avatar = file ? `/uploads/${file.filename}` : null;
+
+    let fieldsToUpdate: Record<string, any> = {};
+
+    if (name) fieldsToUpdate.name = name;
+    if (email) fieldsToUpdate.email = email;
+    if (password) {
+      let hashedPassword = await bcrypt.hash(password, 10);
+      fieldsToUpdate.password = hashedPassword;
+    }
+    if (avatar) fieldsToUpdate.avatar = avatar;
+
+    if (Object.keys(fieldsToUpdate).length === 0) {
+      res.status(400).json({
+        msg: "No changes detected to update",
+      });
+      return;
+    }
+
+    await client.users.update({
+      where: {
+        id: userId,
+      },
+      data: fieldsToUpdate,
+    });
+
+    res.status(200).json({
+      msg: "User updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function deleteUser(req: Request, res: Response) {
+  try {
+    let userId = Number(req.params.userId);
+    if (!userId) {
+      res.status(400).json({
+        msg: "No user id found in params",
+      });
+      return;
+    }
+
+    await client.users.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    res.status(200).json({
+      msg: "The user has been deleted",
     });
   } catch (error) {
     res.status(500).json({
