@@ -1,11 +1,15 @@
 import { Router } from "express";
 import {
   addCategory,
+  createTag,
   deleteCategory,
+  deleteTag,
   deleteUser,
   editUserDetails,
   fetchCategory,
+  fetchTag,
   updateCategory,
+  updateTag,
   userDetails,
   userLogin,
   userSignup,
@@ -67,6 +71,13 @@ userRouter.delete(
   userMiddleware,
   deleteCategory
 );
-userRouter.patch("/update-category/:categoryId", updateCategory);
-
+userRouter.patch(
+  "/update-category/:categoryId",
+  userMiddleware,
+  updateCategory
+);
+userRouter.post("/add-tag", userMiddleware, createTag);
+userRouter.get("/tag", fetchTag);
+userRouter.delete("/delete-tag/:tagId", userMiddleware, deleteTag);
+userRouter.patch("/update-tag/:tagId", userMiddleware, updateTag);
 export { userRouter };
