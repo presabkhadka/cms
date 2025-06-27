@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Roles {
+  id              Int               @id @default(autoincrement())
+  name            String
+  key             String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  RolePermissions RolePermissions[]
+  UserRoles       UserRoles[]
+}
+
+model Permissions {
+  id              Int               @id @default(autoincrement())
+  permission      String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  RolePermissions RolePermissions[]
+}
+
+model RolePermissions {
+  role_id       Int
+  permission_Id Int
+
+  role       Roles       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission Permissions @relation(fields: [permission_Id], references: [id], onDelete: Cascade)
+
+  @@id([role_id, permission_Id])
+}
+
+model Users {
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  password   String
+  avatar     String?
+  status     UserStatus
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  UserRoles  UserRoles[]
+  Comments   Comments[]
+  Revisions  Revisions[]
+  Content    Content[]
+}
+
+model UserRoles {
+  user_id Int
+  role_id Int
+
+  user Users @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role Roles @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, role_id])
+}
+
+model Categories {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  parent_id   Int?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  parent   Categories?  @relation("CategoryToParent", fields: [parent_id], references: [id], onDelete: Cascade)
+  children Categories[] @relation("CategoryToParent")
+  Content  Content[]
+}
+
+model Tags {
+  id          Int           @id @default(autoincrement())
+  name        String
+  slug        String        @unique
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  ContentTags ContentTags[]
+}
+
+model Content {
+  id          Int           @id @default(autoincrement())
+  title       String
+  slug        String        @unique
+  body        String
+  image       String
+  category_id Int
+  status      ContentStatus
+  author_id   Int
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  ContentTags ContentTags[]
+  Comments    Comments[]
+  Revisions   Revisions[]
+
+  category Categories @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  author   Users      @relation(fields: [author_id], references: [id], onDelete: Cascade)
+
+  @@index([category_id, author_id])
+}
+
+model ContentTags {
+  content_id Int
+  tag_id     Int
+
+  content Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  tag     Tags    @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([content_id, tag_id])
+}
+
+model Comments {
+  id         Int           @id @default(autoincrement())
+  content_id Int
+  user_id    Int
+  comment    String
+  status     CommentStatus
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
+
+  content Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  user    Users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([content_id, user_id])
+}
+
+model Revisions {
+  id         Int      @id @default(autoincrement())
+  content_id Int
+  title      String
+  body       String
+  author_id  Int
+  created_at DateTime @default(now())
+
+  content Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
+  author  Users   @relation(fields: [author_id], references: [id], onDelete: Cascade)
+
+  @@index([content_id, author_id])
+}
+
+model Settings {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique
+  value      String
+  group_name String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
