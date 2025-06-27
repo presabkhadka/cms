@@ -5,6 +5,7 @@ import {
   userDetails,
   userLogin,
   userSignup,
+  viewAllUsers,
   viewRole,
 } from "../controller/user.controller";
 import userMiddleware from "../middleware/user.middleware";
@@ -54,5 +55,6 @@ userRouter.patch(
 );
 userRouter.delete("/delete/:userId", deleteUser);
 userRouter.get("/roles", viewRole);
+userRouter.get("/all-users", viewAllUsers);
 
 export { userRouter };

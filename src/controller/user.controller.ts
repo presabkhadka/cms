@@ -262,3 +262,48 @@ export async function viewRole(req: Request, res: Response) {
     });
   }
 }
+
+export async function viewAllUsers(req: Request, res: Response) {
+  try {
+    let users = await client.users.findMany({
+      include: {
+        UserRoles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    if (users.length === 0) {
+      res.status(404).json({
+        msg: "There are currently no users in our db",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function assignRole(req: Request, res: Response) {
+  try {
+    let userId = Number(req.params.userId);
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
