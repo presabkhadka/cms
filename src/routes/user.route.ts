@@ -1,7 +1,11 @@
 import { Router } from "express";
 import {
+  addCategory,
+  deleteCategory,
   deleteUser,
   editUserDetails,
+  fetchCategory,
+  updateCategory,
   userDetails,
   userLogin,
   userSignup,
@@ -56,5 +60,13 @@ userRouter.patch(
 userRouter.delete("/delete/:userId", deleteUser);
 userRouter.get("/roles", viewRole);
 userRouter.get("/all-users", viewAllUsers);
+userRouter.post("/add-category", userMiddleware, addCategory);
+userRouter.get("/category", fetchCategory);
+userRouter.delete(
+  "/delete-category/:categoryId",
+  userMiddleware,
+  deleteCategory
+);
+userRouter.patch("/update-category/:categoryId", updateCategory);
 
 export { userRouter };
