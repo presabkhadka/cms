@@ -1,10 +1,11 @@
 import { Router } from "express";
 import {
-    deleteUser,
+  deleteUser,
   editUserDetails,
   userDetails,
   userLogin,
   userSignup,
+  viewRole,
 } from "../controller/user.controller";
 import userMiddleware from "../middleware/user.middleware";
 import multer from "multer";
@@ -51,6 +52,7 @@ userRouter.patch(
   upload.single("avatar"),
   editUserDetails
 );
-userRouter.delete("/delete/:userId", deleteUser)
+userRouter.delete("/delete/:userId", deleteUser);
+userRouter.get("/roles", viewRole);
 
 export { userRouter };

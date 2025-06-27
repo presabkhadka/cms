@@ -239,3 +239,26 @@ export async function deleteUser(req: Request, res: Response) {
     });
   }
 }
+
+export async function viewRole(req: Request, res: Response) {
+  try {
+    let roles = await client.roles.findMany({});
+    if (roles.length === 0) {
+      res.status(404).json({
+        msg: "There are currently no roles at the moment, Consider creating some roles",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      roles,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
