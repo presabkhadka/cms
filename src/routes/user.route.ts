@@ -1,14 +1,18 @@
-import { Router } from "express";
+import e, { Router } from "express";
 import {
   addCategory,
+  createContent,
   createTag,
   deleteCategory,
+  deleteContent,
   deleteTag,
   deleteUser,
   editUserDetails,
   fetchCategory,
+  fetchContent,
   fetchTag,
   updateCategory,
+  updateContent,
   updateTag,
   userDetails,
   userLogin,
@@ -80,4 +84,9 @@ userRouter.post("/add-tag", userMiddleware, createTag);
 userRouter.get("/tag", fetchTag);
 userRouter.delete("/delete-tag/:tagId", userMiddleware, deleteTag);
 userRouter.patch("/update-tag/:tagId", userMiddleware, updateTag);
+userRouter.get("/content", fetchContent);
+userRouter.post("/add-content", userMiddleware, upload.single("image"),createContent)
+userRouter.patch("/update-content/:contentId", userMiddleware, upload.single("image"), updateContent)
+userRouter.delete("/delete-content/:contentId", userMiddleware, deleteContent)
+
 export { userRouter };
