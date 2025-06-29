@@ -8,8 +8,10 @@ import {
   deleteTag,
   deleteUser,
   editUserDetails,
+  fetchAllRevision,
   fetchCategory,
   fetchContent,
+  fetchSingleRevision,
   fetchTag,
   updateCategory,
   updateContent,
@@ -85,8 +87,24 @@ userRouter.get("/tag", fetchTag);
 userRouter.delete("/delete-tag/:tagId", userMiddleware, deleteTag);
 userRouter.patch("/update-tag/:tagId", userMiddleware, updateTag);
 userRouter.get("/content", fetchContent);
-userRouter.post("/add-content", userMiddleware, upload.single("image"),createContent)
-userRouter.patch("/update-content/:contentId", userMiddleware, upload.single("image"), updateContent)
-userRouter.delete("/delete-content/:contentId", userMiddleware, deleteContent)
+userRouter.post(
+  "/add-content",
+  userMiddleware,
+  upload.single("image"),
+  createContent
+);
+userRouter.patch(
+  "/update-content/:contentId",
+  userMiddleware,
+  upload.single("image"),
+  updateContent
+);
+userRouter.delete("/delete-content/:contentId", userMiddleware, deleteContent);
+userRouter.get(
+  "/content/:contentId/revisions",
+  userMiddleware,
+  fetchAllRevision
+);
+userRouter.get("/revision/:revisionId", userMiddleware, fetchSingleRevision);
 
 export { userRouter };

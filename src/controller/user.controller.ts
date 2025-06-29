@@ -985,3 +985,39 @@ export async function fetchAllRevision(req: Request, res: Response) {
     });
   }
 }
+
+export async function fetchSingleRevision(req: Request, res: Response) {
+  try {
+    let revisionId = Number(req.params.revisionId);
+    if (!revisionId) {
+      res.status(400).json({
+        msg: "No revision id found in the params",
+      });
+      return;
+    }
+
+    let revisions = await client.revisions.findFirst({
+      where: {
+        id: revisionId,
+      },
+    });
+
+    if (!revisions) {
+      res.status(404).json({
+        msg: "No revision found with that id",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      revisions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
