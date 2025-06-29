@@ -1046,8 +1046,8 @@ export async function createComment(req: Request, res: Response) {
 
     let userId = userDetails!.id;
 
-    let comment = req.body.comment
-    let status = req.body.status
+    let comment = req.body.comment;
+    let status = req.body.status;
 
     if (!comment || !status) {
       res.status(400).json({
@@ -1067,6 +1067,42 @@ export async function createComment(req: Request, res: Response) {
 
     res.status(200).json({
       msg: "Comment created",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function fetchCommentOfPost(req: Request, res: Response) {
+  try {
+    let contentId = Number(req.params.contentId);
+    if (!contentId) {
+      res.status(400).json({
+        msg: "No content id found in params",
+      });
+      return;
+    }
+
+    let commentsExists = await client.comments.findMany({
+      where: {
+        content_id: contentId,
+        status: "APPROVED",
+      },
+    });
+
+    if (!commentsExists) {
+      res.status(404).json({
+        msg: "No comments found for this content",
+      });
+    }
+
+    res.status(200).json({
+      commentsExists,
     });
   } catch (error) {
     res.status(500).json({

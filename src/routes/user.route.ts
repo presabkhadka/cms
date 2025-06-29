@@ -11,6 +11,7 @@ import {
   editUserDetails,
   fetchAllRevision,
   fetchCategory,
+  fetchCommentOfPost,
   fetchContent,
   fetchSingleRevision,
   fetchTag,
@@ -112,6 +113,11 @@ userRouter.post(
   userMiddleware,
   upload.none(),
   createComment
+);
+userRouter.get(
+  "/content/:contentId/comments",
+  userMiddleware,
+  fetchCommentOfPost
 );
 
 export { userRouter };
