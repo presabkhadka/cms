@@ -1113,3 +1113,107 @@ export async function fetchCommentOfPost(req: Request, res: Response) {
     });
   }
 }
+
+export async function approveComment(req: Request, res: Response) {
+  try {
+    let commentId = Number(req.params.commentId);
+    if (!commentId) {
+      res.status(400).json({
+        msg: "No comment id found in the params",
+      });
+      return;
+    }
+
+    let commentExists = await client.comments.findFirst({
+      where: {
+        id: commentId,
+      },
+    });
+
+    if (!commentExists) {
+      res.status(404).json({
+        msg: "Comment with this id doesnt exists",
+      });
+      return;
+    }
+
+    if (commentExists.status === "APPROVED") {
+      res.status(400).json({
+        msg: "The comment is already approved",
+      });
+      return;
+    }
+
+    await client.comments.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        status: "APPROVED",
+      },
+    });
+
+    res.status(200).json({
+      msg: "Comment approved successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function rejectComment(req: Request, res: Response) {
+  try {
+    let commentId = Number(req.params.commentId);
+    if (!commentId) {
+      res.status(400).json({
+        msg: "No comment id found in params",
+      });
+      return;
+    }
+
+    let commentExists = await client.comments.findFirst({
+      where: {
+        id: commentId,
+      },
+    });
+
+    if (!commentExists) {
+      res.status(404).json({
+        msg: "No comment with such id found",
+      });
+      return;
+    }
+
+    if (commentExists.status === "REJECTED") {
+      res.status(400).json({
+        msg: "Comment is already rejected",
+      });
+      return;
+    }
+
+    await client.comments.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        status: "REJECTED",
+      },
+    });
+
+    res.status(200).json({
+      msg: "Comment rejected successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}

@@ -1,6 +1,7 @@
 import e, { Router } from "express";
 import {
   addCategory,
+  approveComment,
   createComment,
   createContent,
   createTag,
@@ -15,6 +16,7 @@ import {
   fetchContent,
   fetchSingleRevision,
   fetchTag,
+  rejectComment,
   updateCategory,
   updateContent,
   updateTag,
@@ -119,5 +121,8 @@ userRouter.get(
   userMiddleware,
   fetchCommentOfPost
 );
+
+userRouter.patch("/comment/approve/:commentId", userMiddleware, approveComment);
+userRouter.patch("/comment/reject/:commentId", userMiddleware, rejectComment);
 
 export { userRouter };
