@@ -1,30 +1,7 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import {
-  addCategory,
-  approveComment,
-  createComment,
-  createContent,
-  createSettings,
-  createTag,
-  deleteCategory,
-  deleteComment,
-  deleteContent,
-  deleteSetting,
-  deleteTag,
   deleteUser,
-  editSetting,
   editUserDetails,
-  fetchAllRevision,
-  fetchCategory,
-  fetchCommentOfPost,
-  fetchContent,
-  fetchSingleRevision,
-  fetchTag,
-  getSettings,
-  rejectComment,
-  updateCategory,
-  updateContent,
-  updateTag,
   userDetails,
   userLogin,
   userSignup,
@@ -34,6 +11,41 @@ import {
 import userMiddleware from "../middleware/user.middleware";
 import multer from "multer";
 import path from "path";
+import {
+  addCategory,
+  deleteCategory,
+  fetchCategory,
+  updateCategory,
+} from "../controller/category.controller";
+import {
+  createTag,
+  deleteTag,
+  fetchTag,
+  updateTag,
+} from "../controller/tag.controller";
+import {
+  createContent,
+  deleteContent,
+  fetchContent,
+  updateContent,
+} from "../controller/content.controller";
+import {
+  fetchAllRevision,
+  fetchSingleRevision,
+} from "../controller/revision.controller";
+import {
+  approveComment,
+  createComment,
+  deleteComment,
+  fetchCommentOfPost,
+  rejectComment,
+} from "../controller/comment.controller";
+import {
+  createSettings,
+  deleteSetting,
+  editSetting,
+  getSettings,
+} from "../controller/settings.controller";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

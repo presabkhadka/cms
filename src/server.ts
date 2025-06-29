@@ -1,19 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotnev from "dotenv";
-import { userRouter } from "./routes/user.route";
+import { userRouter } from "./routes/api.route";
 
 dotnev.config();
 
-const app = express();
+export const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-let port = process.env.PORT;
-
-app.use("/user", userRouter);
-
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+app.use("/api", userRouter);
