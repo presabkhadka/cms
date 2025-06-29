@@ -20,6 +20,7 @@ import {
   fetchContent,
   fetchSingleRevision,
   fetchTag,
+  getSettings,
   rejectComment,
   updateCategory,
   updateContent,
@@ -153,6 +154,6 @@ userRouter.delete(
   userMiddleware,
   deleteSetting
 );
-userRouter.get("/settings")
+userRouter.get("/settings", getSettings);
 
 export { userRouter };
