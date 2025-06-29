@@ -6,6 +6,7 @@ import {
   createContent,
   createTag,
   deleteCategory,
+  deleteComment,
   deleteContent,
   deleteTag,
   deleteUser,
@@ -124,5 +125,6 @@ userRouter.get(
 
 userRouter.patch("/comment/approve/:commentId", userMiddleware, approveComment);
 userRouter.patch("/comment/reject/:commentId", userMiddleware, rejectComment);
+userRouter.delete("/comment/delete/:commentId", userMiddleware, deleteComment);
 
 export { userRouter };

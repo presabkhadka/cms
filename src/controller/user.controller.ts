@@ -1217,3 +1217,45 @@ export async function rejectComment(req: Request, res: Response) {
     });
   }
 }
+
+export async function deleteComment(req: Request, res: Response) {
+  try {
+    let commentId = Number(req.params.commentId);
+    if (!commentId) {
+      res.status(400).json({
+        msg: "No comment id found in the params",
+      });
+      return;
+    }
+
+    let commentExists = await client.comments.findFirst({
+      where: {
+        id: commentId,
+      },
+    });
+
+    if (!commentExists) {
+      res.status(404).json({
+        msg: "No comments with such id found",
+      });
+      return;
+    }
+
+    await client.comments.delete({
+      where: {
+        id: commentId,
+      },
+    });
+
+    res.status(200).json({
+      msg: "Comment deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
