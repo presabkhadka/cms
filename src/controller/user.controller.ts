@@ -5,7 +5,7 @@ import { createUserSchema } from "../validators/createUser";
 import vine from "@vinejs/vine";
 import { PrismaClient } from "../generated/prisma";
 import dotenv from "dotenv";
-import fs, { stat } from "fs";
+import fs, { stat, truncate } from "fs";
 import path from "path";
 import { createCategorySchema } from "../validators/createCategory";
 
@@ -1395,6 +1395,30 @@ export async function deleteSetting(req: Request, res: Response) {
 
     res.status(200).json({
       msg: "Settings deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function getSettings(req: Request, res: Response) {
+  try {
+    let settings = await client.settings.findMany({});
+
+    if (!settings) {
+      res.status(404).json({
+        msg: "No settings found in db",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      settings,
     });
   } catch (error) {
     res.status(500).json({

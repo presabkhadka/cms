@@ -66,6 +66,7 @@ const upload = multer({
 
 const userRouter = Router();
 
+// user auth routes
 userRouter.post("/signup", userSignup);
 userRouter.post("/login", userLogin);
 userRouter.get("/details", userMiddleware, userDetails);
@@ -78,6 +79,8 @@ userRouter.patch(
 userRouter.delete("/delete/:userId", deleteUser);
 userRouter.get("/roles", viewRole);
 userRouter.get("/all-users", viewAllUsers);
+
+// category routes
 userRouter.post("/add-category", userMiddleware, addCategory);
 userRouter.get("/category", fetchCategory);
 userRouter.delete(
@@ -90,10 +93,14 @@ userRouter.patch(
   userMiddleware,
   updateCategory
 );
+
+// tag routes
 userRouter.post("/add-tag", userMiddleware, createTag);
 userRouter.get("/tag", fetchTag);
 userRouter.delete("/delete-tag/:tagId", userMiddleware, deleteTag);
 userRouter.patch("/update-tag/:tagId", userMiddleware, updateTag);
+
+// content routes
 userRouter.get("/content", fetchContent);
 userRouter.post(
   "/add-content",
@@ -108,12 +115,16 @@ userRouter.patch(
   updateContent
 );
 userRouter.delete("/delete-content/:contentId", userMiddleware, deleteContent);
+
+// revision routes
 userRouter.get(
   "/content/:contentId/revisions",
   userMiddleware,
   fetchAllRevision
 );
 userRouter.get("/revision/:revisionId", userMiddleware, fetchSingleRevision);
+
+// comment routes
 userRouter.post(
   "/content/:contentId/comments",
   userMiddleware,
@@ -125,10 +136,11 @@ userRouter.get(
   userMiddleware,
   fetchCommentOfPost
 );
-
 userRouter.patch("/comment/approve/:commentId", userMiddleware, approveComment);
 userRouter.patch("/comment/reject/:commentId", userMiddleware, rejectComment);
 userRouter.delete("/comment/delete/:commentId", userMiddleware, deleteComment);
+
+// settings routes
 userRouter.post("/settings/create", userMiddleware, createSettings);
 userRouter.patch(
   "/settings/update/:settingsId",
@@ -141,5 +153,6 @@ userRouter.delete(
   userMiddleware,
   deleteSetting
 );
+userRouter.get("/settings")
 
 export { userRouter };
