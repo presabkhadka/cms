@@ -307,42 +307,6 @@ export async function viewAllUsers(req: Request, res: Response) {
   }
 }
 
-// export async function assignRole(req: Request, res: Response) {
-//   try {
-//     let userId = Number(req.params.userId);
-
-//     let userDetails = await client.users.findFirst({
-//       where: {
-//         id: userId,
-//       },
-//       include: {
-//         UserRoles: {
-//           include: {
-//             role: true,
-//           },
-//         },
-//       },
-//     });
-
-//     let isUser = userDetails?.UserRoles.some((ur) => ur.role.name === "BASIC");
-//     console.log("🚀 ~ assignRole ~ isUser:", isUser)
-
-//     if (!isUser) {
-//       res.status(409).json({
-//         msg: "The user is admin",
-//       });
-//     }
-
-//   } catch (error) {
-//     res.status(500).json({
-//       msg:
-//         error instanceof Error
-//           ? error.message
-//           : "Something went wrong with the server",
-//     });
-//   }
-// }
-
 export async function addCategory(req: Request, res: Response) {
   try {
     const payload = await vine.validate({
@@ -891,6 +855,15 @@ export async function updateContent(req: Request, res: Response) {
       });
       return;
     }
+
+    await client.revisions.create({
+      data: {
+        content_id: contentId,
+        title: content.title,
+        body: content.body,
+        author_id: userId,
+      },
+    });
 
     await client.content.update({
       where: {
