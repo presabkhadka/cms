@@ -1,6 +1,7 @@
 import e, { Router } from "express";
 import {
   addCategory,
+  createComment,
   createContent,
   createTag,
   deleteCategory,
@@ -106,5 +107,11 @@ userRouter.get(
   fetchAllRevision
 );
 userRouter.get("/revision/:revisionId", userMiddleware, fetchSingleRevision);
+userRouter.post(
+  "/content/:contentId/comments",
+  userMiddleware,
+  upload.none(),
+  createComment
+);
 
 export { userRouter };

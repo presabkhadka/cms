@@ -140,7 +140,7 @@ model Comments {
   content_id Int
   user_id    Int
   comment    String
-  status     CommentStatus
+  status     CommentStatus  @default(PENDING)
   created_at DateTime      @default(now())
   updated_at DateTime      @updatedAt
 

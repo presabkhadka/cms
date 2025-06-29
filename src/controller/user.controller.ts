@@ -5,7 +5,7 @@ import { createUserSchema } from "../validators/createUser";
 import vine from "@vinejs/vine";
 import { PrismaClient } from "../generated/prisma";
 import dotenv from "dotenv";
-import fs from "fs";
+import fs, { stat } from "fs";
 import path from "path";
 import { createCategorySchema } from "../validators/createCategory";
 
@@ -1011,6 +1011,62 @@ export async function fetchSingleRevision(req: Request, res: Response) {
 
     res.status(200).json({
       revisions,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}
+
+export async function createComment(req: Request, res: Response) {
+  try {
+    let contentId = Number(req.params.contentId);
+    if (!contentId) {
+      res.status(400).json({
+        msg: "No content id found in params",
+      });
+      return;
+    }
+
+    // @ts-ignore
+    let user = req.user;
+
+    let userDetails = await client.users.findFirst({
+      where: {
+        email: user,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    let userId = userDetails!.id;
+
+    let comment = req.body.comment
+    let status = req.body.status
+
+    if (!comment || !status) {
+      res.status(400).json({
+        msg: "Input fields cannot be left empty",
+      });
+      return;
+    }
+
+    await client.comments.create({
+      data: {
+        content_id: contentId,
+        user_id: userId,
+        comment,
+        status,
+      },
+    });
+
+    res.status(200).json({
+      msg: "Comment created",
     });
   } catch (error) {
     res.status(500).json({
