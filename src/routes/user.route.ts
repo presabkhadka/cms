@@ -4,12 +4,15 @@ import {
   approveComment,
   createComment,
   createContent,
+  createSettings,
   createTag,
   deleteCategory,
   deleteComment,
   deleteContent,
+  deleteSetting,
   deleteTag,
   deleteUser,
+  editSetting,
   editUserDetails,
   fetchAllRevision,
   fetchCategory,
@@ -126,5 +129,17 @@ userRouter.get(
 userRouter.patch("/comment/approve/:commentId", userMiddleware, approveComment);
 userRouter.patch("/comment/reject/:commentId", userMiddleware, rejectComment);
 userRouter.delete("/comment/delete/:commentId", userMiddleware, deleteComment);
+userRouter.post("/settings/create", userMiddleware, createSettings);
+userRouter.patch(
+  "/settings/update/:settingsId",
+  userMiddleware,
+  upload.none(),
+  editSetting
+);
+userRouter.delete(
+  "/settings/delete/:settingsId",
+  userMiddleware,
+  deleteSetting
+);
 
 export { userRouter };
