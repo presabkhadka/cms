@@ -27,9 +27,8 @@ export async function createComment(req: Request, res: Response) {
     let userId = userDetails!.id;
 
     let comment = req.body.comment;
-    let status = req.body.status;
 
-    if (!comment || !status) {
+    if (!comment) {
       res.status(400).json({
         msg: "Input fields cannot be left empty",
       });
@@ -41,7 +40,7 @@ export async function createComment(req: Request, res: Response) {
         content_id: contentId,
         user_id: userId,
         comment,
-        status,
+        status: "PENDING",
       },
     });
 

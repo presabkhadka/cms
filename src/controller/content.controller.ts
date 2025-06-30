@@ -327,3 +327,76 @@ export async function deleteContent(req: Request, res: Response) {
     });
   }
 }
+
+export async function publishContent(req: Request, res: Response) {
+  try {
+    let contentId = Number(req.params.contentId);
+    if (!contentId) {
+      res.status(400).json({
+        msg: "No content id found in the headers",
+      });
+      return;
+    }
+
+    let contentExists = await client.content.findFirst({
+      where: {
+        id: contentId,
+      },
+    });
+
+    let contentStatus = contentExists?.status;
+
+    if (contentStatus === "PUBLISHED") {
+      res.status(400).json({
+        msg: "This content is already published",
+      });
+      return;
+    }
+
+    // @ts-ignore
+    let user = req.user;
+    let userRole = await client.users.findFirst({
+      where: {
+        email: user,
+      },
+      include: {
+        UserRoles: true,
+      },
+    });
+
+    let roleId = userRole!.id;
+
+    let role = await client.roles.findFirst({
+      where: {
+        id: roleId,
+      },
+    });
+
+    if (role?.name === "BASIC") {
+      res.status(409).json({
+        msg: "Sorry you dont have this permission",
+      });
+      return;
+    }
+
+    await client.content.update({
+      where: {
+        id: contentId,
+      },
+      data: {
+        status: "PUBLISHED",
+      },
+    });
+
+    res.status(200).json({
+      msg: "Content published successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:
+        error instanceof Error
+          ? error.message
+          : "Something went wrong with the server",
+    });
+  }
+}

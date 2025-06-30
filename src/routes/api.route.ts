@@ -27,6 +27,7 @@ import {
   createContent,
   deleteContent,
   fetchContent,
+  publishContent,
   updateContent,
 } from "../controller/content.controller";
 import {
@@ -130,6 +131,7 @@ userRouter.patch(
   updateContent
 );
 userRouter.delete("/delete-content/:contentId", userMiddleware, deleteContent);
+userRouter.patch("/publish-content/:contentId", userMiddleware, publishContent);
 
 // revision routes
 userRouter.get(
