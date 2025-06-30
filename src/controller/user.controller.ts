@@ -79,7 +79,8 @@ export async function userSignup(req: Request, res: Response) {
 
 export async function userLogin(req: Request, res: Response) {
   try {
-    let { email, password } = req.body;
+    let email = req.body.email;
+    let password = req.body.password;
 
     if (!email || !password) {
       res.status(400).json({

@@ -89,7 +89,9 @@ userRouter.patch(
   upload.single("avatar"),
   editUserDetails
 );
-userRouter.delete("/delete/:userId", deleteUser);
+userRouter.delete("/delete/:userId", userMiddleware, deleteUser);
+
+// role routes
 userRouter.get("/roles", viewRole);
 userRouter.get("/all-users", viewAllUsers);
 
