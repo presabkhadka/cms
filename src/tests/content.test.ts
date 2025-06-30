@@ -24,7 +24,7 @@ describe("PATCH /api/update-content/:contentId", () => {
       slug: "this is a new slug",
     };
     let res = await request(app)
-      .patch("/api/update-content/4")
+      .patch("/api/update-content/7")
       .send(body)
       .set("Authorization", `Bearer ${token}`);
 
@@ -35,7 +35,7 @@ describe("PATCH /api/update-content/:contentId", () => {
 describe("DELETE /api/delete-content/:contentId", () => {
   it("takes the content id as params and deletes the following content", async () => {
     let res = await request(app)
-      .delete("/api/delete-content/4")
+      .delete("/api/delete-content/7")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);

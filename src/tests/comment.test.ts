@@ -37,7 +37,7 @@ describe("GET /api/content/:contentId/comments", () => {
 describe("PATCH /api/comment/approve/:commentId", () => {
   it("this takes comment id in params and approve that comment if it is not approved", async () => {
     let res = await request(app)
-      .patch("/api/comment/approve/7")
+      .patch("/api/comment/approve/8")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
@@ -47,7 +47,7 @@ describe("PATCH /api/comment/approve/:commentId", () => {
 describe("PATCH /api/comment/reject/:commentId", () => {
   it("this takes comment id in parmas and reject that comment", async () => {
     let res = await request(app)
-      .patch("/api/comment/reject/7")
+      .patch("/api/comment/reject/9")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
@@ -57,7 +57,7 @@ describe("PATCH /api/comment/reject/:commentId", () => {
 describe("DELETE /api/comment/delete/:commentId", () => {
   it("this takes the comment id in params and deletes that comment", async () => {
     let res = await request(app)
-      .delete("/api/comment/delete/7")
+      .delete("/api/comment/delete/10")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);

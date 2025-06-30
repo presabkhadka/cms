@@ -13,8 +13,8 @@ let token = jwt.sign({ email: "admin@gmail.com" }, process.env.JWT_SECRET!);
 describe("POST /api/add-tag", () => {
   it("creates a tag", async () => {
     let body = {
-      name: "tag1",
-      slug: "this is a slug",
+      name: "vue",
+      slug: "this is vue",
     };
 
     let res = await request(app)
@@ -38,7 +38,7 @@ describe("GET /api/tag", () => {
 describe("DELETE /api/delete-tag/:tagId", () => {
   it("take a tag id from the params and then deletes the following tag", async () => {
     let res = await request(app)
-      .delete("/api/delete-tag/3")
+      .delete("/api/delete-tag/7")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
@@ -48,11 +48,11 @@ describe("DELETE /api/delete-tag/:tagId", () => {
 describe("PATCH /api/update-tag/:tagId", () => {
   it("takes a tag id from the params and then updates the following tag", async () => {
     let body = {
-      name: "newtag",
+      name: "ronaldo",
     };
 
     let res = await request(app)
-      .patch("/api/update-tag/2")
+      .patch("/api/update-tag/9")
       .send(body)
       .set("Authorization", `Bearer ${token}`);
 

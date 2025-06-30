@@ -15,9 +15,9 @@ dotenv.config();
 describe("POST /api/signup", () => {
   it("should signup the user and hash the pw", async () => {
     let body = {
-      name: "test",
-      email: "test1@gmail.com",
-      password: "test1234",
+      name: "jest",
+      email: "jest@gmail.com",
+      password: "jest1234",
       avatar: "test.png",
       status: "ACTIVE",
       UserRoles: {
@@ -47,8 +47,6 @@ describe("POST /api/login", () => {
 
     let res = await request(app).post("/api/login").send(body);
 
-    console.log("Response status:", res.status);
-    console.log("Response body:", res.body);
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("token");
   }, 15000);
@@ -73,7 +71,7 @@ describe("PATCH /api/update-details/:userId", () => {
     let token = jwt.sign({ email: "admin@gmail.com" }, process.env.JWT_SECRET!);
 
     let body = {
-      name: "hero",
+      name: "messi",
     };
 
     let res = await request(app)
@@ -87,10 +85,10 @@ describe("PATCH /api/update-details/:userId", () => {
 
 describe("DELETE /api/delete/:userId", () => {
   it("should take the user id in the params and delete the user", async () => {
-    let token = jwt.sign({ email: "test1@gmail.com" }, process.env.JWT_SECRET!);
+    let token = jwt.sign({ email: "test2@gmail.com" }, process.env.JWT_SECRET!);
 
     let res = await request(app)
-      .delete("/api/delete/7")
+      .delete("/api/delete/10")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);

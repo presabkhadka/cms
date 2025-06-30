@@ -12,8 +12,8 @@ let token = jwt.sign({ email: "admin@gmail.com" }, process.env.JWT_SECRET!);
 describe("POST /api/add-category", () => {
   it("it should create a new category", async () => {
     let body = {
-      name: "fiction",
-      description: "this is wonderful",
+      name: "keyboard",
+      description: "this is wonderful keyboard",
       parent_id: null,
     };
 
@@ -51,7 +51,7 @@ describe("PATCH /api/update-category/:categoryId", () => {
 describe("DELETE /api/delete-category/:categoryId", () => {
   it("takes the category id in the params and deletes the changes", async () => {
     let res = await request(app)
-      .delete("/api/delete-category/4")
+      .delete("/api/delete-category/5")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);

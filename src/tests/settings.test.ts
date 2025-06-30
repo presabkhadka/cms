@@ -10,8 +10,8 @@ let token = jwt.sign({ email: "admin@gmail.com" }, process.env.JWT_SECRET!);
 describe("POST /api/settings/create", () => {
   it("it creates a settings", async () => {
     let body = {
-      key: "test key",
-      value: "test value",
+      key: "jest key",
+      value: "jest value",
       group_name: "test group",
     };
 
@@ -31,7 +31,7 @@ describe("PATCH /api/settings/update/:settingsId", () => {
     };
 
     let res = await request(app)
-      .patch("/api/settings/update/2")
+      .patch("/api/settings/update/3")
       .send(body)
       .set("Authorization", `Bearer ${token}`);
 
@@ -50,7 +50,7 @@ describe("GET /api/settings", () => {
 describe("DELETE /api/settings/delete/:settingsId", () => {
   it("it takes settings id as params and delete that settings", async () => {
     let res = await request(app)
-      .delete("/api/settings/delete/2")
+      .delete("/api/settings/delete/3")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
