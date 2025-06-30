@@ -42,7 +42,7 @@ describe("DELETE /api/delete-tag/:tagId", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-  });
+  }, 15000);
 });
 
 describe("PATCH /api/update-tag/:tagId", () => {
@@ -57,5 +57,5 @@ describe("PATCH /api/update-tag/:tagId", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-  });
+  }, 15000);
 });

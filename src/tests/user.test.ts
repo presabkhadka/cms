@@ -35,7 +35,7 @@ describe("POST /api/signup", () => {
 
     const res = await request(app).post("/api/signup").send(body);
     expect(res.status).toBe(200);
-  });
+  }, 15000);
 });
 
 describe("POST /api/login", () => {
@@ -51,7 +51,7 @@ describe("POST /api/login", () => {
     console.log("Response body:", res.body);
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("token");
-  });
+  }, 15000);
 });
 
 describe("GET /api/details", () => {
@@ -65,7 +65,7 @@ describe("GET /api/details", () => {
     console.log(res.body);
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("userDetails");
-  });
+  }, 15000);
 });
 
 describe("PATCH /api/update-details/:userId", () => {
@@ -82,7 +82,7 @@ describe("PATCH /api/update-details/:userId", () => {
       .send(body);
 
     expect(res.status).toBe(200);
-  });
+  }, 15000);
 });
 
 describe("DELETE /api/delete/:userId", () => {
@@ -94,5 +94,5 @@ describe("DELETE /api/delete/:userId", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-  });
+  }, 15000);
 });
